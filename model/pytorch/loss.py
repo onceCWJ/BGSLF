@@ -10,19 +10,20 @@ def masked_mae_loss(y_pred, y_true):
     return loss.mean()
 
 def masked_mape_loss(y_pred, y_true):
-    '''
+    
     mask = (y_true != 0).float()
     mask /= mask.mean()
     loss = torch.abs(torch.div(y_true - y_pred, y_true))
     loss = loss * mask
     loss[loss != loss] = 0
-        return loss.mean()
+    return loss.mean()
+
     '''
     mask = torch.gt(y_true, 0.)
     pred = torch.masked_select(y_pred, mask)
     true = torch.masked_select(y_true, mask)
     return torch.mean(torch.abs(torch.div((true - pred), true)))
-
+    '''
 def masked_rmse_loss(y_pred, y_true):
     mask = (y_true != 0).float()
     mask /= mask.mean()

@@ -133,14 +133,18 @@ def generate_graph_seq2seq_io_data(df, x_offsets, y_offsets, add_time_in_day=Tru
         
 def main(args):
     print("Generating training data:")
-    print("METR-LA:")
-    generate_data_h5(args, "./data/METR-LA/metr-la.h5", "./data/METR-LA/")
-    print("Solar_AL:")
-    generate_data(args, "./data/solar_AL/solar_AL.txt", "./data/solar_AL/")
-    print("PEMS04:")
-    generate_data(args, "./data/PEMS04/pems04.npz", "./data/PEMS04/")
-    print("PEMS08:")
-    generate_data(args, "./data/PEMS08/pems08.npz", "./data/PEMS08/")
+    if args.dataset == "METR-LA":
+        print("METR-LA:")
+        generate_data_h5(args, "./data/METR-LA/metr-la.h5", "./data/METR-LA/")
+    if args.dataset == "Solar_AL":
+        print("Solar_AL:")
+        generate_data(args, "./data/solar_AL/solar_AL.txt", "./data/solar_AL/")
+    if args.dataset == "PEMS04":
+        print("PEMS04:")
+        generate_data(args, "./data/PEMS04/pems04.npz", "./data/PEMS04/")
+    if args.dataset == "PEMS08":
+        print("PEMS08:")
+        generate_data(args, "./data/PEMS08/pems08.npz", "./data/PEMS08/")
     print("Finish!")
 
 if __name__ == "__main__":
@@ -148,6 +152,7 @@ if __name__ == "__main__":
     parser.add_argument("--window", type=int, default=12)
     parser.add_argument("--horizon", type=int, default=12)
     parser.add_argument("--train_rate", type=float, default=0.7)
-    parser.add_argument("--val_rate", type=float, default=0.1)    
+    parser.add_argument("--val_rate", type=float, default=0.1)
+    parser.add_argument("--dataset",type=str, default="METR-LA")
     args = parser.parse_args()
     main(args)

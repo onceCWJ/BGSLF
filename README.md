@@ -1,4 +1,4 @@
-# Balanced Graph Structure Learning for Multivariate Time Series Forecasting
+# Balanced Spatial-Temporal Graph Structure Learning for Multivariate Time Series Forecasting: A Trade-off between Efficiency and Flexibility
 ## Requirements
 - Python 3.8.3
 - see `requirements.txt`
@@ -6,7 +6,7 @@
 ## Data Preparation
 
 #### H5 File
-Download the traffic data files for Los Angeles (METR-LA) from [Google Drive](https://drive.google.com/open?id=10FOTa6HXPqX8Pf5WRoRwcFnW9BrNZEIX) or [Baidu Yun](https://pan.baidu.com/s/14Yy9isAIZYdU__OYEQGa_g) links provided by [DCRNN](https://github.com/liyaguang/DCRNN). Put into the `data/{METR-LA}` folder.
+Download the traffic data files for Los Angeles (METR-LA) from [Google Drive](https://drive.google.com/open?id=10FOTa6HXPqX8Pf5WRoRwcFnW9BrNZEIX) or [Baidu Yun](https://pan.baidu.com/s/14Yy9isAIZYdU__OYEQGa_g) links provided by [DCRNN](https://github.com/liyaguang/DCRNN). Put into the `data/{METR-LA,PEMS-BAY}` folder.
 
 #### TXT File
 Download Solar-Energy datasets from [https://github.com/laiguokun/multivariate-time-series-data](https://github.com/laiguokun/multivariate-time-series-data). Put into the `data/{solar_AL}` folder.
@@ -17,10 +17,16 @@ Download PEMS04, PEMS08 datasets from [https://github.com/Davidham3/ASTGCN/tree/
 
 ## Split dataset
 
-Run the following commands to generate train/validation/test dataset at `data/{METR-LA,solar_AL,PEMS04,PEMS08}/{train,val,test}.npz`.
+Run the following commands to generate train/validation/test dataset at `data/{METR-LA,PEMS-BAY,solar_AL,traffic,electricity,exchange_rate,PEMS04,PEMS08}/{train,val,test}.npz`.
 
 ```
-python generate_data.py 
+python generate_data.py --dataset METR-LA
+
+python generate_data.py --dataset PEMS04
+
+python generate_data.py --dataset PEMS08
+
+python generate_data.py --dataset Solar_AL
 ```
 
 ## Train Commands
@@ -30,6 +36,7 @@ python generate_data.py
 # Use METR-LA dataset
 python train.py --dataset_dir=data/METR-LA
 ```
+
 * Solar-Energy
 ```
 # Use Solar-Energy dataset

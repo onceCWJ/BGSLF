@@ -16,7 +16,7 @@ def cosine_similarity_torch(x1, x2=None, eps=1e-8):
     return torch.mm(x1, x2.t()) / (w1 * w2.t()).clamp(min=eps)
 
 class Adjacency_generator(nn.Module):
-    def __init__(self, embedding_size, num_nodes, time_series, kernel_size, freq, requires_graph, seq_len, feas_dim, input_dim, device):
+    def __init__(self, embedding_size, num_nodes, time_series, kernel_size, freq, requires_graph, seq_len, feas_dim, input_dim, device, reduction_ratio=16):
         super(Adjacency_generator, self).__init__()
         self.freq = freq
         self.kernel_size = kernel_size
@@ -31,7 +31,8 @@ class Adjacency_generator(nn.Module):
         self.delta_series = torch.zeros_like(self.time_series).to(device)
         self.conv1d = nn.Conv1d(in_channels=self.segm * self.feas_dim, out_channels=self.graphs, kernel_size=kernel_size, padding=0)
         self.fc_1 = nn.Linear(self.freq - self.kernel_size + 1, self.embedding)
-        self.fc_2 = nn.Linear(self.embedding, self.num_nodes)
+        self.fc_2 = nn.Linear(self.embedding, self.embedding // reduction_ratio)
+        self.fc_3 = nn.Linear(self.embedding // reduction_ratio, self.num_nodes)
         self.process()
         self.device = device
 
@@ -47,13 +48,15 @@ class Adjacency_generator(nn.Module):
             times.append(time_seg)
 
         t = torch.stack(times, dim=0).reshape(self.segm, self.freq, self.num_nodes, self.feas_dim) # (num_segment, freq, num_nodes, feas_dim)
-        t = t.permute(2, 0, 3, 1)
-        self.times = t.reshape(self.num_nodes, -1, self.freq)
+        self.t = t
 
     def forward(self, node_feas): # input: (seq_len, batch_size, num_sensor * input_dim)
+        t = self.t.permute(2, 0, 3, 1)
+        self.times = t.reshape(self.num_nodes, -1, self.freq)
         mid_input = self.conv1d(self.times).permute(1,0,2) # (graphs, num_nodes, freq-kernel_size+1)
         mid_output = torch.stack([F.relu(self.fc_1(mid_input[i,...])) for i in range(self.graphs)], dim=0)
-        output = torch.sigmoid(self.fc_2(mid_output))
+        out_put = F.relu(self.fc_2(mid_output))
+        output = torch.sigmoid(self.fc_3(out_put))
         # cos_similarity
         max_similarity = minm
         seq_len = node_feas.shape[0]
@@ -237,8 +240,8 @@ class BGSLFModel(nn.Module, Seq2SeqAttrs):
         :return: output: (self.horizon, batch_size, self.num_nodes * self.output_dim)
         """
 
-        adj = SmoothSparseUnit(self.Adjacency_generator(inputs), 1, 0.02)
-        # adj = F.relu(self.Adjacency_generator(inputs))
+        # adj = SmoothSparseUnit(self.Adjacency_generator(inputs), 1, 0.02)
+        adj = F.relu(self.Adjacency_generator(inputs))
         # adj = torch.sigmoid(self.Adjacency_generator(inputs))
         # adj = F.tanh(self.Adjacency_generator(inputs))
         # adj = F.gumbel_softmax(logits=self.Adjacency_generator(inputs),tau=temp,hard=False)
