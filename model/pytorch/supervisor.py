@@ -103,7 +103,7 @@ class BGSLFSupervisor:
                 filter_type_abbr = 'R'
             elif filter_type == 'dual_random_walk':
                 filter_type_abbr = 'DR'
-            run_id = 'GTS_%s_%d_h_%d_%s_lr_%g_bs_%d_%s/' % (
+            run_id = 'BGSLF_%s_%d_h_%d_%s_lr_%g_bs_%d_%s/' % (
                 filter_type_abbr, max_diffusion_step, horizon,
                 structure, learning_rate, batch_size,
                 time.strftime('%m%d%H%M%S'))
