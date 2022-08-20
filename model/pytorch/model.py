@@ -240,8 +240,8 @@ class BGSLFModel(nn.Module, Seq2SeqAttrs):
         :return: output: (self.horizon, batch_size, self.num_nodes * self.output_dim)
         """
 
-        # adj = SmoothSparseUnit(self.Adjacency_generator(inputs), 1, 0.02)
-        adj = F.relu(self.Adjacency_generator(inputs))
+        adj = SmoothSparseUnit(self.Adjacency_generator(inputs), 1, 0.02)
+        # adj = F.relu(self.Adjacency_generator(inputs))
         # adj = torch.sigmoid(self.Adjacency_generator(inputs))
         # adj = F.tanh(self.Adjacency_generator(inputs))
         # adj = F.gumbel_softmax(logits=self.Adjacency_generator(inputs),tau=temp,hard=False)
