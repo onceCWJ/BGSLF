@@ -32,7 +32,7 @@ parser.add_argument('--output_dim',default=1,type=int)
 parser.add_argument('--rnn_units',default=64,type=int)
 parser.add_argument('--use_curriculum_learning',default=True,type=bool)
 parser.add_argument('--embedding_size',default=256,type=int)
-parser.add_argument('--kernel_size',default=12,type=int)
+parser.add_argument('--kernel_size',default=3,type=int)
 parser.add_argument('--freq',default=288,type=int)
 parser.add_argument('--requires_graph',default=2,type=int)
 # train settings0

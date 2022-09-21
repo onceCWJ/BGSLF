@@ -1,4 +1,5 @@
 # Balanced Spatial-Temporal Graph Structure Learning for Multivariate Time Series Forecasting: A Trade-off between Efficiency and Flexibility
+## Accepted by ACML2022
 ## Requirements
 - Python 3.8.3
 - see `requirements.txt`
