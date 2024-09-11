@@ -55,5 +55,18 @@ python train.py --dataset_dir=data/PEMS08
 ```
 
 ## Citation
+# Citation Format
+If you find this codebase helpful for your research, please consider citing the following paper:
+
+```plaintext
+@inproceedings{chen2023balanced,
+  title={Balanced spatial-temporal graph structure learning for multivariate time series forecasting: a trade-off between efficiency and flexibility},
+  author={Chen, Weijun and Wang, Yanze and Du, Chengshuo and Jia, Zhenglong and Liu, Feng and Chen, Ran},
+  booktitle={Asian Conference on Machine Learning},
+  pages={185--200},
+  year={2023},
+  organization={PMLR}
+}
+```
 This version of implementation is only for learning purposes. For research, please refer to the following url:
 https://proceedings.mlr.press/v189/chen23a.html
